@@ -1,0 +1,12 @@
+.piano-wrapper {
+  max-width: 1100px;
+  min-width: 320px;
+  margin: 50px auto;
+}
+
+.piano-container {
+  border: 5px solid black;
+  height: 400px;
+  display: flex;
+  justify-content: space-evenly;
+}

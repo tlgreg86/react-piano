@@ -1,0 +1,50 @@
+
+.key {
+  width: 100%;
+  height: 100%;
+  background-color: white;
+  cursor: pointer;
+
+  &.major {
+    border-left: 1px solid black;
+
+    &:hover{
+      background-color: darken(white, 8);
+    }
+    &:active {
+      background-color: darken(white, 15);
+    }
+
+  }
+
+  &.minor {
+    left: 4%;
+    margin-left: -8%;
+    height: 250px;
+    max-width: 8%;
+    background-color: black;
+    color: white;
+    z-index: 1;
+
+    &:hover{
+      background-color: lighten(black, 15);
+    }
+    &:active {
+      background-color: lighten(black, 30);
+    }
+
+    p {
+      display: none;
+    }
+  }
+
+  p {
+    display: flex;
+    height: 100%;
+    justify-content: center;
+    align-items: flex-end;
+    padding-bottom: 1em;
+    font-size: 2em;
+  }
+
+}
