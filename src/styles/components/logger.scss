@@ -1,0 +1,18 @@
+
+.logger {
+  background: white;
+  word-wrap: break-word;
+  max-width: 1100px;
+  min-width: 320px;
+  min-height: 100px;
+  height: auto;
+  margin: 50px auto;
+  border: 5px solid black;
+  padding: 10px 5px;
+
+  span {
+    padding: 10px;
+    height: auto;
+  }
+
+}
