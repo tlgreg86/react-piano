@@ -23,10 +23,17 @@ constructor(props) {
     keysLogged: [],
   }
 }
+  
+  handleClick = (keyName) => {
+    const {keysLogged} = this.state
+    keysLogged.push(keyName)
+    this.setState({keysLogged})
+  }
 
   render() {
     return (
       <div>
+        <Piano keys={this.state.keys} handleClick={this.handleClick} />
         <Logger keysLogged={this.state.keysLogged} />
       </div>
     )
