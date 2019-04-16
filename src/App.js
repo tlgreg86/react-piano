@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import Piano from './components/Piano/Piano'
+import Logger from './components/Logger/Logger';
 
 class App extends Component {
 constructor(props) {
@@ -18,14 +19,22 @@ constructor(props) {
       { keyLabel: 'A', type: 'major', isActive: false },
       { keyLabel: 'a', type: 'minor', isActive: false },
       { keyLabel: 'B', type: 'major', isActive: false },
-    ]
+    ],
+    keysLogged: [],
   }
 }
+  
+  handleClick = (keyName) => {
+    const {keysLogged} = this.state
+    keysLogged.push(keyName)
+    this.setState({keysLogged})
+  }
 
   render() {
     return (
       <div>
-        <Piano keys={this.state.keys} />
+        <Piano keys={this.state.keys} handleClick={this.handleClick} />
+        <Logger keysLogged={this.state.keysLogged} />
       </div>
     )
   }
