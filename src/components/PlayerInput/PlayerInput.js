@@ -10,7 +10,6 @@ export default class PlayerInput extends Component {
 
   handleChange = (value) => {
     const userInputArray = value.split(',')
-    console.log(userInputArray)
     this.setState({
       userInputArray,
       userInput: value,
