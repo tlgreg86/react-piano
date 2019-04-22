@@ -1,5 +1,5 @@
-@import 'base/reset.scss';
-@import 'components/piano.scss';
-@import 'components/key.scss';
-@import 'components/logger.scss';
-@import 'components/playerInput.scss';
+@import './reset.scss';
+@import '../components/Piano/piano.scss';
+@import '../components/Key/key.scss';
+@import '../components/Logger/logger.scss';
+@import '../components/PlayerInput/playerInput.scss';
