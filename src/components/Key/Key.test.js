@@ -19,12 +19,12 @@ describe('Key', () => {
   it('should render without crashing', () => {
     const wrapper = makeWrapper()
     expect(wrapper.exists()).toBe(true)
-  });
+  })
 
   it('should render <div /> with correct className', () => {
     const wrapper = makeWrapper()
     expect(wrapper.hasClass("key C major")).toBe(true)
-  });
+  })
 
   it('should render <p></p> with correct className and children', () => {
     const wrapper = makeWrapper()
@@ -37,6 +37,6 @@ describe('Key', () => {
     expect(handleClick).toHaveBeenCalledTimes(0)
     wrapper.simulate('click')
     expect(handleClick).toHaveBeenCalledTimes(1)
-  });
+  })
   
-});
+})
