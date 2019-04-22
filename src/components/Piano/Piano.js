@@ -10,7 +10,7 @@ const Piano = ({ keys, handleClick }) => {
             return (
               <Key 
                 key={`${i}-${keyLabel}`}
-                classNames={`key ${keyLabel} ${type} ${isActive}`}
+                classNames={`key ${keyLabel} ${type} ${isActive && 'active'}`}
                 keyLabel={keyLabel}
                 handleClick={handleClick}
               />
