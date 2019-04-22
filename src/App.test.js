@@ -32,6 +32,4 @@ describe('App', () => {
     expect(instance.playPiano).toHaveBeenCalledTimes(1)
   });
 
-  it.skip('TODO: should update keys state when playPiano is executed');
-
 })
