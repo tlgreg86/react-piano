@@ -1,5 +1,6 @@
 import React from 'react'
 import Key from '../Key/Key'
+import PropTypes from 'prop-types'
 
 const Piano = ({ keys, handleClick }) => {
   return (
@@ -20,6 +21,11 @@ const Piano = ({ keys, handleClick }) => {
       </div>
     </div>
   )
+}
+
+Piano.propTypes = {
+  keys: PropTypes.arrayOf(PropTypes.object).isRequired,
+  handleClick: PropTypes.func.isRequired,
 }
 
 export default Piano

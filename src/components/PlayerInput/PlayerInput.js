@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import PropTypes from 'prop-types'
 
 export default class PlayerInput extends Component {
   state = {
@@ -47,4 +48,8 @@ export default class PlayerInput extends Component {
       </div>
     )
   }
+}
+
+PlayerInput.propTypes = {
+  handleSubmit: PropTypes.func.isRequired,
 }

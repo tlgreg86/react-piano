@@ -4,9 +4,7 @@ import Logger from './components/Logger/Logger';
 import PlayerInput from './components/PlayerInput/PlayerInput';
 
 class App extends Component {
-constructor(props) {
-  super(props)
-  this.state = {
+  state = {
     keys: [
       { keyLabel: 'C', type: 'major', isActive: false },
       { keyLabel: 'c', type: 'minor', isActive: false },
@@ -24,7 +22,6 @@ constructor(props) {
     keysLogged: [],
     keysPlayed: [],
   }
-}
   
   handleClick = (keyName) => {
     const {keysLogged} = this.state

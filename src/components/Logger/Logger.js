@@ -1,4 +1,5 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 
 const Logger = ({keysLogged}) => {
   return (
@@ -10,6 +11,10 @@ const Logger = ({keysLogged}) => {
       }
     </div>
   )
+}
+
+Logger.propTypes = {
+  keysLogged: PropTypes.arrayOf(PropTypes.string).isRequired,
 }
 
 export default Logger
