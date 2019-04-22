@@ -11,7 +11,7 @@
     &:hover{
       background-color: darken(white, 8);
     }
-    &:active {
+    &:active, &.active {
       background-color: darken(white, 15);
     }
 
@@ -29,7 +29,7 @@
     &:hover{
       background-color: lighten(black, 15);
     }
-    &:active {
+    &:active, &.active {
       background-color: lighten(black, 30);
     }
 
