@@ -18,7 +18,6 @@ describe('Key', () => {
 
   it('should render without crashing', () => {
     const wrapper = makeWrapper()
-    console.log(wrapper.html())
     expect(wrapper.exists()).toBe(true)
   });
 
