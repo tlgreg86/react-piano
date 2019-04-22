@@ -1,5 +1,6 @@
 {
   "name": "react-piano",
+  "homepage": "http://tlgreg86.github.io/react-piano",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
