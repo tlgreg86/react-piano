@@ -11,10 +11,16 @@ const PlayerInput = ({ handleSubmit, setIsInputFocused }) => {
   }, []);
 
   const handleChange = useCallback((value) => {
-    const newInputArray = value.split(',');
+    // Remove all non-note characters
+    const cleanValue = value.replace(/[^CcDdEFfGgAaB]/g, '');
+    
+    // Add commas before each character except the first one
+    const formattedValue = cleanValue.split('').join(',');
+    
+    const newInputArray = formattedValue.split(',');
     setUserInputArray(newInputArray);
-    setUserInput(value);
-    setInputValid(validateString(value));
+    setUserInput(formattedValue);
+    setInputValid(validateString(formattedValue));
   }, [validateString]);
 
   const handleFocus = useCallback(() => {
