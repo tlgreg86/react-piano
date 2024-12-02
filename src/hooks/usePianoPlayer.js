@@ -4,7 +4,6 @@ import { PIANO_KEYS } from '../constants/pianoKeys';
 export const usePianoPlayer = () => {
   const [keys, setKeys] = useState(PIANO_KEYS);
   const [keysLogged, setKeysLogged] = useState([]);
-  const [keysPlayed, setKeysPlayed] = useState([]);
 
   const handleClick = useCallback((keyName) => {
     setKeysLogged(prev => [...prev, keyName]);
@@ -31,7 +30,6 @@ export const usePianoPlayer = () => {
   }, []);
 
   const playPiano = useCallback((sequence) => {
-    setKeysPlayed(sequence);
     let counter = 0;
     const timer = setInterval(() => {
       if (counter >= sequence.length) {
