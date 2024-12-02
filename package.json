@@ -4,15 +4,15 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "enzyme": "^3.9.0",
-    "enzyme-adapter-react-16": "^1.12.1",
-    "gh-pages": "^2.0.1",
-    "jest-enzyme": "^7.0.2",
-    "node-sass": "^4.11.0",
-    "react": "^16.8.6",
-    "react-dom": "^16.8.6",
-    "react-scripts": "2.1.8",
-    "react-test-renderer": "^16.8.6"
+    "enzyme": "^3.11.0",
+    "enzyme-adapter-react-16": "^1.15.7",
+    "gh-pages": "^6.1.0",
+    "jest-enzyme": "^7.1.2",
+    "sass": "^1.69.5",
+    "react": "^16.14.0",
+    "react-dom": "^16.14.0",
+    "react-scripts": "5.0.1",
+    "react-test-renderer": "^16.14.0"
   },
   "scripts": {
     "start": "react-scripts start",
