@@ -5,7 +5,7 @@ import PlayerInput from './components/PlayerInput/PlayerInput';
 import { usePianoPlayer } from './hooks/usePianoPlayer';
 
 const App = () => {
-  const { keys, keysLogged, handleClick, playPiano } = usePianoPlayer();
+  const { keys, keysLogged, handleClick, playPiano, setIsInputFocused } = usePianoPlayer();
 
   const handleSubmit = useCallback((data) => {
     playPiano(data);
@@ -15,7 +15,10 @@ const App = () => {
     <div>
       <Piano keys={keys} handleClick={handleClick} />
       <Logger keysLogged={keysLogged} />
-      <PlayerInput handleSubmit={handleSubmit} />
+      <PlayerInput 
+        handleSubmit={handleSubmit}
+        setIsInputFocused={setIsInputFocused}
+      />
     </div>
   );
 };
