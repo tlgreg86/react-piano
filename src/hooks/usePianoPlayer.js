@@ -1,4 +1,4 @@
-import { useState, useCallback, useEffect } from 'react';
+import { useState, useCallback, useEffect, useRef } from 'react';
 import { PIANO_KEYS, KEY_TO_NOTE } from '../constants/pianoKeys';
 import { useAudioContext } from './useAudioContext';
 
@@ -7,6 +7,7 @@ export const usePianoPlayer = () => {
   const [keysLogged, setKeysLogged] = useState([]);
   const [isInputFocused, setIsInputFocused] = useState(false);
   const { playNote } = useAudioContext();
+  const pressedKeys = useRef(new Set());
 
   const handleClick = useCallback((keyName) => {
     setKeysLogged(prev => [...prev, keyName]);
@@ -30,7 +31,7 @@ export const usePianoPlayer = () => {
             : key
         )
       );
-    }, 200); // Reduced to 200ms to match typical key press duration
+    }, 200);
   }, []);
 
   const playPiano = useCallback((sequence) => {
@@ -48,26 +49,35 @@ export const usePianoPlayer = () => {
         handleClick(currentKey);
       }
       counter++;
-    }, 500); // Reduced to 500ms for more natural playback
+    }, 500);
 
     return () => clearInterval(timer);
   }, [keys, changeKeyState, handleClick]);
 
   const handleKeyDown = useCallback((event) => {
-    if (isInputFocused) return;
+    if (isInputFocused || event.repeat || pressedKeys.current.has(event.key.toLowerCase())) return;
     
     const note = KEY_TO_NOTE[event.key.toLowerCase()];
     if (note) {
       event.preventDefault();
+      pressedKeys.current.add(event.key.toLowerCase());
       changeKeyState(note);
       handleClick(note);
     }
   }, [isInputFocused, changeKeyState, handleClick]);
 
+  const handleKeyUp = useCallback((event) => {
+    pressedKeys.current.delete(event.key.toLowerCase());
+  }, []);
+
   useEffect(() => {
     window.addEventListener('keydown', handleKeyDown);
-    return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [handleKeyDown]);
+    window.addEventListener('keyup', handleKeyUp);
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown);
+      window.removeEventListener('keyup', handleKeyUp);
+    };
+  }, [handleKeyDown, handleKeyUp]);
 
   return {
     keys,
