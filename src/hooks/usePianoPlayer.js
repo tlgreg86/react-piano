@@ -1,14 +1,17 @@
 import { useState, useCallback, useEffect } from 'react';
 import { PIANO_KEYS, KEY_TO_NOTE } from '../constants/pianoKeys';
+import { useAudioContext } from './useAudioContext';
 
 export const usePianoPlayer = () => {
   const [keys, setKeys] = useState(PIANO_KEYS);
   const [keysLogged, setKeysLogged] = useState([]);
   const [isInputFocused, setIsInputFocused] = useState(false);
+  const { playNote } = useAudioContext();
 
   const handleClick = useCallback((keyName) => {
     setKeysLogged(prev => [...prev, keyName]);
-  }, []);
+    playNote(keyName);
+  }, [playNote]);
 
   const changeKeyState = useCallback((keyLabel) => {
     setKeys(prevKeys => 
@@ -27,7 +30,7 @@ export const usePianoPlayer = () => {
             : key
         )
       );
-    }, 1000);
+    }, 200); // Reduced to 200ms to match typical key press duration
   }, []);
 
   const playPiano = useCallback((sequence) => {
@@ -45,7 +48,7 @@ export const usePianoPlayer = () => {
         handleClick(currentKey);
       }
       counter++;
-    }, 1000);
+    }, 500); // Reduced to 500ms for more natural playback
 
     return () => clearInterval(timer);
   }, [keys, changeKeyState, handleClick]);
