@@ -1,13 +1,13 @@
 {
   "files": {
     "main.css": "/react-piano/static/css/main.a3b6e174.css",
-    "main.js": "/react-piano/static/js/main.d0a87daf.js",
+    "main.js": "/react-piano/static/js/main.49e2ced3.js",
     "index.html": "/react-piano/index.html",
     "main.a3b6e174.css.map": "/react-piano/static/css/main.a3b6e174.css.map",
-    "main.d0a87daf.js.map": "/react-piano/static/js/main.d0a87daf.js.map"
+    "main.49e2ced3.js.map": "/react-piano/static/js/main.49e2ced3.js.map"
   },
   "entrypoints": [
     "static/css/main.a3b6e174.css",
-    "static/js/main.d0a87daf.js"
+    "static/js/main.49e2ced3.js"
   ]
 }
