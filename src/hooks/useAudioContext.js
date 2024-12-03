@@ -19,59 +19,54 @@ const NOTE_FREQUENCIES = {
 export const useAudioContext = () => {
   const [audioContext, setAudioContext] = useState(null);
 
+  // Initialize context immediately if possible
   useEffect(() => {
-    // Initialize audio context on first user interaction
-    const initAudioContext = () => {
-      if (!audioContext) {
-        const newContext = new (window.AudioContext || window.webkitAudioContext)();
-        setAudioContext(newContext);
-        // Remove event listeners after initialization
-        window.removeEventListener('mousedown', initAudioContext);
-        window.removeEventListener('keydown', initAudioContext);
-        window.removeEventListener('touchstart', initAudioContext);
-      }
-    };
-
-    window.addEventListener('mousedown', initAudioContext);
-    window.addEventListener('keydown', initAudioContext);
-    window.addEventListener('touchstart', initAudioContext);
-
-    return () => {
-      window.removeEventListener('mousedown', initAudioContext);
-      window.removeEventListener('keydown', initAudioContext);
-      window.removeEventListener('touchstart', initAudioContext);
-    };
-  }, [audioContext]);
+    try {
+      const ctx = new (window.AudioContext || window.webkitAudioContext)();
+      setAudioContext(ctx);
+    } catch (error) {
+      console.error('Failed to initialize AudioContext:', error);
+    }
+  }, []);
 
   const playNote = useCallback((note) => {
     if (!audioContext) return;
 
-    // Create oscillator and gain nodes
-    const oscillator = audioContext.createOscillator();
-    const gainNode = audioContext.createGain();
+    try {
+      // Resume context if it's in suspended state
+      if (audioContext.state === 'suspended') {
+        audioContext.resume();
+      }
 
-    // Set frequency based on note
-    oscillator.frequency.setValueAtTime(NOTE_FREQUENCIES[note], audioContext.currentTime);
-    oscillator.type = 'sine';
+      // Create oscillator and gain nodes
+      const oscillator = audioContext.createOscillator();
+      const gainNode = audioContext.createGain();
 
-    // Configure envelope
-    gainNode.gain.setValueAtTime(0, audioContext.currentTime);
-    gainNode.gain.linearRampToValueAtTime(0.5, audioContext.currentTime + 0.1);
-    gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 1);
+      // Set frequency based on note
+      oscillator.frequency.setValueAtTime(NOTE_FREQUENCIES[note], audioContext.currentTime);
+      oscillator.type = 'sine';
 
-    // Connect nodes
-    oscillator.connect(gainNode);
-    gainNode.connect(audioContext.destination);
+      // Configure envelope
+      gainNode.gain.setValueAtTime(0, audioContext.currentTime);
+      gainNode.gain.linearRampToValueAtTime(0.5, audioContext.currentTime + 0.1);
+      gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 1);
 
-    // Start and stop the oscillator
-    oscillator.start(audioContext.currentTime);
-    oscillator.stop(audioContext.currentTime + 1);
+      // Connect nodes
+      oscillator.connect(gainNode);
+      gainNode.connect(audioContext.destination);
 
-    // Cleanup
-    return () => {
-      oscillator.disconnect();
-      gainNode.disconnect();
-    };
+      // Start and stop the oscillator
+      oscillator.start(audioContext.currentTime);
+      oscillator.stop(audioContext.currentTime + 1);
+
+      // Cleanup
+      return () => {
+        oscillator.disconnect();
+        gainNode.disconnect();
+      };
+    } catch (error) {
+      console.error('Error playing note:', error);
+    }
   }, [audioContext]);
 
   return { playNote };
