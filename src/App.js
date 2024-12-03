@@ -2,6 +2,7 @@ import React, { useCallback } from 'react';
 import Piano from './components/Piano/Piano';
 import Logger from './components/Logger/Logger';
 import PlayerInput from './components/PlayerInput/PlayerInput';
+import ErrorBoundary from './components/ErrorBoundary/ErrorBoundary';
 import { usePianoPlayer } from './hooks/usePianoPlayer';
 
 const App = () => {
@@ -12,14 +13,24 @@ const App = () => {
   }, [playPiano]);
 
   return (
-    <div>
-      <Piano keys={keys} handleClick={handleClick} />
-      <Logger keysLogged={keysLogged} />
-      <PlayerInput 
-        handleSubmit={handleSubmit}
-        setIsInputFocused={setIsInputFocused}
-      />
-    </div>
+    <ErrorBoundary>
+      <div>
+        <ErrorBoundary>
+          <Piano keys={keys} handleClick={handleClick} />
+        </ErrorBoundary>
+        
+        <ErrorBoundary>
+          <Logger keysLogged={keysLogged} />
+        </ErrorBoundary>
+        
+        <ErrorBoundary>
+          <PlayerInput 
+            handleSubmit={handleSubmit}
+            setIsInputFocused={setIsInputFocused}
+          />
+        </ErrorBoundary>
+      </div>
+    </ErrorBoundary>
   );
 };
 
