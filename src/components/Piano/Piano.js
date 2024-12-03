@@ -1,6 +1,7 @@
-import React from 'react'
-import Key from '../Key/Key'
-import PropTypes from 'prop-types'
+import React from 'react';
+import Key from '../Key/Key';
+import PropTypes from 'prop-types';
+import { KeysPropType } from '../../types/piano';
 
 const Piano = ({ keys, handleClick }) => {
   return (
@@ -20,12 +21,12 @@ const Piano = ({ keys, handleClick }) => {
         }
       </div>
     </div>
-  )
-}
+  );
+};
 
 Piano.propTypes = {
-  keys: PropTypes.arrayOf(PropTypes.object).isRequired,
+  keys: KeysPropType.isRequired,
   handleClick: PropTypes.func.isRequired,
-}
+};
 
-export default Piano
+export default Piano;

@@ -63,4 +63,9 @@ PlayerInput.propTypes = {
   setIsInputFocused: PropTypes.func.isRequired
 };
 
+PlayerInput.propTypes = {
+  handleSubmit: PropTypes.func.isRequired,
+  setIsInputFocused: PropTypes.func.isRequired
+};
+
 export default PlayerInput;

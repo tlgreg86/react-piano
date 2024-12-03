@@ -1,5 +1,6 @@
-import React from 'react'
-import PropTypes from 'prop-types'
+import React from 'react';
+import PropTypes from 'prop-types';
+import { NotePropType } from '../../types/piano';
 
 const Logger = ({keysLogged}) => {
   return (
@@ -10,11 +11,11 @@ const Logger = ({keysLogged}) => {
         )
       }
     </div>
-  )
-}
+  );
+};
 
 Logger.propTypes = {
-  keysLogged: PropTypes.arrayOf(PropTypes.string).isRequired,
-}
+  keysLogged: PropTypes.arrayOf(NotePropType).isRequired,
+};
 
-export default Logger
+export default Logger;
