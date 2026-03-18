@@ -1,35 +1,49 @@
-import React from 'react'
-import { shallow } from 'enzyme'
-import App from './App'
+import React from 'react';
+import { render, screen, fireEvent } from '@testing-library/react';
+import App from './App';
+import { usePianoPlayer } from './hooks/usePianoPlayer';
+import { PIANO_KEYS } from './constants/pianoKeys';
 
+jest.mock('./hooks/usePianoPlayer', () => ({
+  usePianoPlayer: jest.fn(),
+}));
 
 describe('App', () => {
+  let mockHandleClick;
+  let mockPlayPiano;
+  let mockSetIsInputFocused;
 
-  const makeWrapper = () => shallow(<App />)
+  beforeEach(() => {
+    mockHandleClick = jest.fn();
+    mockPlayPiano = jest.fn();
+    mockSetIsInputFocused = jest.fn();
+
+    usePianoPlayer.mockReturnValue({
+      keys: PIANO_KEYS,
+      keysLogged: [],
+      handleClick: mockHandleClick,
+      playPiano: mockPlayPiano,
+      setIsInputFocused: mockSetIsInputFocused,
+    });
+  });
 
   it('should render without crashing', () => {
-    const wrapper = makeWrapper()
-    expect(wrapper.exists()).toBe(true)
-  })
-
-  it('should update keysLogged in state when handleSubmit is executed', () => {
-    const wrapper = makeWrapper()
-    const instance = wrapper.instance()
-
-    expect(wrapper.state('keysLogged')).toEqual([])
-    instance.handleClick('A')
-    expect(wrapper.state('keysLogged')).toEqual(['A'])
+    render(<App />);
+    expect(screen.getByPlaceholderText(/enter notes/i)).toBeInTheDocument();
   });
 
-  it('should update keysPlayed in state and execute the playPiano method', async () => {
-    const wrapper = makeWrapper()
-    const instance = wrapper.instance()
-
-    expect(wrapper.state('keysPlayed')).toEqual([])
-    jest.spyOn(instance, 'playPiano')
-    await instance.handleSubmit(['A','B','C'])
-    expect(wrapper.state('keysPlayed')).toEqual(['A', 'B', 'C'])
-    expect(instance.playPiano).toHaveBeenCalledTimes(1)
+  it('should call handleClick when a piano key is clicked', () => {
+    render(<App />);
+    const firstKey = screen.getAllByText(PIANO_KEYS[0].keyLabel)[0];
+    fireEvent.click(firstKey.closest('div'));
+    expect(mockHandleClick).toHaveBeenCalledWith(PIANO_KEYS[0].keyLabel);
   });
 
-})
+  it('should call playPiano when a valid sequence is submitted', () => {
+    render(<App />);
+    const textarea = screen.getByPlaceholderText(/enter notes/i);
+    fireEvent.change(textarea, { target: { value: 'A' } });
+    fireEvent.click(screen.getByText('Submit'));
+    expect(mockPlayPiano).toHaveBeenCalled();
+  });
+});

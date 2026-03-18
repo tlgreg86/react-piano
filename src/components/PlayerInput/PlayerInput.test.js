@@ -1,76 +1,71 @@
-import React from 'react'
-import { shallow } from 'enzyme'
-import PlayerInput from './PlayerInput'
-
+import React from 'react';
+import { render, screen, fireEvent } from '@testing-library/react';
+import PlayerInput from './PlayerInput';
 
 describe('PlayerInput', () => {
-  const handleSubmit = jest.fn()
+  const handleSubmit = jest.fn();
+  const setIsInputFocused = jest.fn();
 
   const mockProps = {
     handleSubmit,
-  }
+    setIsInputFocused,
+  };
 
-  const makeWrapper = () => shallow(
-    <PlayerInput {...mockProps} />
-  )
+  beforeEach(() => {
+    handleSubmit.mockClear();
+    setIsInputFocused.mockClear();
+  });
 
   it('should render without crashing', () => {
-    const wrapper = makeWrapper()
-    expect(wrapper.exists()).toBe(true)
-  })
-
-  it('should have initial state', () => {
-    const wrapper = makeWrapper()
-    expect(wrapper.state()).toEqual({
-      userInputArray: [],
-      userInput: '',
-      inputValid: false
-    })
-  })
-
-  it('should render wrapper <div /> with correct className', () => {
-    const wrapper = makeWrapper()
-    expect(wrapper.hasClass('player-input-wrapper')).toBe(true)
-  })
-
-  it('should render valid input element when inputValid is true or false in state', () => {
-    const wrapper = makeWrapper()
-    expect(wrapper.childAt(0).childAt(0).hasClass('invalid-input')).toBe(true)
-    wrapper.setState({inputValid: true })
-    expect(wrapper.childAt(0).childAt(0).hasClass('valid-input')).toBe(true)
-  })
-  
-  it('should render player input form with text area and submit button', () => {
-    const wrapper = makeWrapper()
-    expect(wrapper.childAt(1).hasClass('player-input')).toBe(true)
-    expect(wrapper.find('textarea').exists()).toBe(true)
-    expect(wrapper.find('button').exists()).toBe(true)
-    expect(wrapper.find('button').hasClass('submit-playlist')).toBe(true)
+    const { container } = render(<PlayerInput {...mockProps} />);
+    expect(container.firstChild).toBeInTheDocument();
   });
 
-  it('should update userInput in state when user types in textarea and validate the input', () => {
-    const wrapper = makeWrapper()
-    const event1 = {target: {value: 'A'}}
-    const event2 = {target: {value: 'A,x'}}
-
-    wrapper.find('textarea').simulate('change', event1)
-    expect(wrapper.state()).toEqual({
-      userInputArray: ['A'],
-      userInput: 'A',
-      inputValid: true,
-    })
-    wrapper.find('textarea').simulate('change', event2)
-    expect(wrapper.state()).toEqual({
-      userInputArray: ['A','x'],
-      userInput: 'A,x',
-      inputValid: false,
-    })
-  })
-
-  it('should execute handleSubmit when button is clicked', () => {
-    const wrapper = makeWrapper()
-    wrapper.find('button').simulate('click')
-    expect(handleSubmit).toHaveBeenCalledTimes(1)
+  it('should render wrapper div with correct className', () => {
+    const { container } = render(<PlayerInput {...mockProps} />);
+    expect(container.firstChild).toHaveClass('player-input-wrapper');
   });
 
-})
+  it('should show invalid indicator and disabled button in initial state', () => {
+    render(<PlayerInput {...mockProps} />);
+    expect(document.querySelector('.invalid-input')).toBeInTheDocument();
+    expect(screen.getByRole('button')).toBeDisabled();
+  });
+
+  it('should render the player-input form with textarea and submit button', () => {
+    render(<PlayerInput {...mockProps} />);
+    expect(document.querySelector('.player-input')).toBeInTheDocument();
+    expect(screen.getByRole('textbox')).toBeInTheDocument();
+    expect(screen.getByRole('button')).toHaveClass('submit-playlist');
+  });
+
+  it('should show valid indicator and enable button when valid input is typed', () => {
+    render(<PlayerInput {...mockProps} />);
+    fireEvent.change(screen.getByRole('textbox'), { target: { value: 'A' } });
+    expect(document.querySelector('.valid-input')).toBeInTheDocument();
+    expect(screen.getByRole('button')).not.toBeDisabled();
+  });
+
+  it('should show invalid indicator when input is invalid', () => {
+    render(<PlayerInput {...mockProps} />);
+    fireEvent.change(screen.getByRole('textbox'), { target: { value: 'x' } });
+    expect(document.querySelector('.invalid-input')).toBeInTheDocument();
+    expect(screen.getByRole('button')).toBeDisabled();
+  });
+
+  it('should call handleSubmit when the submit button is clicked', () => {
+    render(<PlayerInput {...mockProps} />);
+    fireEvent.change(screen.getByRole('textbox'), { target: { value: 'A' } });
+    fireEvent.click(screen.getByRole('button'));
+    expect(handleSubmit).toHaveBeenCalledTimes(1);
+  });
+
+  it('should call setIsInputFocused(true) on textarea focus and false on blur', () => {
+    render(<PlayerInput {...mockProps} />);
+    const textarea = screen.getByRole('textbox');
+    fireEvent.focus(textarea);
+    expect(setIsInputFocused).toHaveBeenCalledWith(true);
+    fireEvent.blur(textarea);
+    expect(setIsInputFocused).toHaveBeenCalledWith(false);
+  });
+});

@@ -1,42 +1,40 @@
-import React from 'react'
-import { shallow } from 'enzyme'
-import Key from './Key'
-
+import React from 'react';
+import { render, screen, fireEvent } from '@testing-library/react';
+import Key from './Key';
 
 describe('Key', () => {
-  const handleClick = jest.fn()
-  
+  const handleClick = jest.fn();
+
   const mockProps = {
     keyLabel: 'C',
     classNames: 'key C major',
     handleClick,
-  }
-  
-  const makeWrapper = () => shallow(
-    <Key {...mockProps} />
-  )
+  };
+
+  beforeEach(() => {
+    handleClick.mockClear();
+  });
 
   it('should render without crashing', () => {
-    const wrapper = makeWrapper()
-    expect(wrapper.exists()).toBe(true)
-  })
+    const { container } = render(<Key {...mockProps} />);
+    expect(container.firstChild).toBeInTheDocument();
+  });
 
-  it('should render <div /> with correct className', () => {
-    const wrapper = makeWrapper()
-    expect(wrapper.hasClass("key C major")).toBe(true)
-  })
+  it('should render with correct className on the outer div', () => {
+    const { container } = render(<Key {...mockProps} />);
+    expect(container.firstChild).toHaveClass('key', 'C', 'major');
+  });
 
-  it('should render <p></p> with correct className and children', () => {
-    const wrapper = makeWrapper()
-    expect(wrapper.childAt(0).hasClass('key-label')).toBe(true)
-    expect(wrapper.childAt(0).contains('C')).toBe(true)
-  })
+  it('should render a <p> with class key-label and correct text', () => {
+    render(<Key {...mockProps} />);
+    const label = screen.getByText('C');
+    expect(label).toHaveClass('key-label');
+  });
 
-  it('should execute handleClick method when clicked on', () => {
-    const wrapper = makeWrapper()
-    expect(handleClick).toHaveBeenCalledTimes(0)
-    wrapper.simulate('click')
-    expect(handleClick).toHaveBeenCalledTimes(1)
-  })
-  
-})
+  it('should call handleClick with the keyLabel when clicked', () => {
+    const { container } = render(<Key {...mockProps} />);
+    fireEvent.click(container.firstChild);
+    expect(handleClick).toHaveBeenCalledTimes(1);
+    expect(handleClick).toHaveBeenCalledWith('C');
+  });
+});

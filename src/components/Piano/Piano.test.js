@@ -1,10 +1,9 @@
-import React from 'react'
-import { shallow } from 'enzyme'
-import Piano from './Piano'
-
+import React from 'react';
+import { render } from '@testing-library/react';
+import Piano from './Piano';
 
 describe('Piano', () => {
-  const handleClick = jest.fn()
+  const handleClick = jest.fn();
 
   const mockProps = {
     keys: [
@@ -22,29 +21,26 @@ describe('Piano', () => {
       { keyLabel: 'B', type: 'major', isActive: false },
     ],
     handleClick,
-  }
-
-  const makeWrapper = () => shallow(
-    <Piano {...mockProps} />
-  )
+  };
 
   it('should render without crashing', () => {
-    const wrapper = makeWrapper()
-    expect(wrapper.exists()).toBe(true)
-  })
+    const { container } = render(<Piano {...mockProps} />);
+    expect(container.firstChild).toBeInTheDocument();
+  });
 
-  it('should render piano wrapper <div /> with correct className', () => {
-    const wrapper = makeWrapper()
-    expect(wrapper.hasClass('piano-wrapper')).toBe(true)
-  })
+  it('should render piano wrapper div with correct className', () => {
+    const { container } = render(<Piano {...mockProps} />);
+    expect(container.firstChild).toHaveClass('piano-wrapper');
+  });
 
-  it('should render piano container <div /> with correct className', () => {
-    const wrapper = makeWrapper()
-    expect(wrapper.childAt(0).hasClass('piano-container')).toBe(true)
-  })
+  it('should render piano container div with correct className', () => {
+    const { container } = render(<Piano {...mockProps} />);
+    expect(container.firstChild.firstChild).toHaveClass('piano-container');
+  });
 
-  it('should render, based on length of keys array, the correct number of keys', () => {
-    const wrapper = makeWrapper()
-    expect(wrapper.childAt(0).children().length).toEqual(mockProps.keys.length)
-  })
-})
+  it('should render the correct number of keys based on keys array length', () => {
+    const { container } = render(<Piano {...mockProps} />);
+    const keys = container.querySelectorAll('.key');
+    expect(keys).toHaveLength(mockProps.keys.length);
+  });
+});
