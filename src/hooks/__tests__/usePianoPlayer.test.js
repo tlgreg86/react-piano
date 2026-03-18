@@ -12,12 +12,12 @@ describe('usePianoPlayer', () => {
   let mockPlayNote;
 
   beforeEach(() => {
+    // Clear all mocks before each test
+    jest.clearAllMocks();
+
     // Setup mock for playNote
     mockPlayNote = jest.fn();
     useAudioContext.mockReturnValue({ playNote: mockPlayNote });
-
-    // Clear all mocks before each test
-    jest.clearAllMocks();
   });
 
   it('should initialize with default state', () => {
@@ -76,16 +76,19 @@ describe('usePianoPlayer', () => {
       result.current.playPiano(['C', 'D', 'E']);
     });
 
-    // First note should be played immediately
+    // First note plays on the first interval tick (500ms)
+    act(() => {
+      jest.advanceTimersByTime(500);
+    });
     expect(mockPlayNote).toHaveBeenCalledWith('C');
 
-    // Advance timer by 500ms for second note
+    // Second note plays on the second tick
     act(() => {
       jest.advanceTimersByTime(500);
     });
     expect(mockPlayNote).toHaveBeenCalledWith('D');
 
-    // Advance timer by another 500ms for third note
+    // Third note plays on the third tick
     act(() => {
       jest.advanceTimersByTime(500);
     });
@@ -102,12 +105,21 @@ describe('usePianoPlayer', () => {
       result.current.playPiano(['C', 'INVALID', 'E']);
     });
 
-    // First note should be played
+    // First note plays on the first tick
+    act(() => {
+      jest.advanceTimersByTime(500);
+    });
     expect(mockPlayNote).toHaveBeenCalledWith('C');
 
-    // Advance timer by 1000ms (skipping invalid note)
+    // INVALID note tick — playNote should not be called again
     act(() => {
-      jest.advanceTimersByTime(1000);
+      jest.advanceTimersByTime(500);
+    });
+    expect(mockPlayNote).toHaveBeenCalledTimes(1);
+
+    // Third note plays on the third tick
+    act(() => {
+      jest.advanceTimersByTime(500);
     });
     expect(mockPlayNote).toHaveBeenCalledWith('E');
 
