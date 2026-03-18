@@ -23,6 +23,7 @@
     "deploy": "gh-pages -d build",
     "test": "react-scripts test",
     "coverage": "npm test -- --coverage",
+    "lint": "eslint src --ext .js",
     "eject": "react-scripts eject"
   },
   "eslintConfig": {
